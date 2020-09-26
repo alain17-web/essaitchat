@@ -1,4 +1,6 @@
 <?php 
+
+/*Ce fichier sert à effectuer une recherche par mot-clé et à afficher les résultats. On peut aussi y ajouter une pagination*/
 session_start();
 if(!isset($_SESSION['nickname']) || empty($_SESSION['nickname'])){
     header("location:index.php");
@@ -45,5 +47,6 @@ require 'connectToDb.php';
         ?>
     </div>
     <a href="history.php">Back to history.php</a>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html>
