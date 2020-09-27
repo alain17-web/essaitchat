@@ -13,7 +13,7 @@ require 'connectToDb.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>span.surlign1{font-style:italic;background-color:yellow;}</style>
     <title>Search</title>
 </head>
 <body>
@@ -22,21 +22,39 @@ require 'connectToDb.php';
 
     <div class="message">
         <?php 
-            if(isset($_POST['submit-search'])){
-                $ar_search = mysqli_real_escape_string($db,$_POST['search']);
+            if(isset($_GET['submit-search'])){
+                $ar_search = mysqli_real_escape_string($db,$_GET['search']);
+
+                
+
                 $ar_sql = "SELECT * FROM essaitchat WHERE themessage LIKE '%$ar_search%' OR username LIKE '%$ar_search%' OR thedate LIKE '%$ar_search%'";
 
+                
                 $ar_result = mysqli_query($db,$ar_sql);
+
+                function highlightWords($ar_text, $ar_search){
+                    $ar_text = preg_replace('#'. preg_quote($ar_search) .'#i', '<span style="background-color: #F9F902;">\\0</span>', $ar_text);
+                    return $ar_text;
+                    
+                }
                 $ar_queryResult = mysqli_num_rows($ar_result);
                 ?>
 
                 <b><?php echo "$ar_queryResult  results found";?> : </b><br/><br/>
                 <?php 
+
+                
                 
                 if($ar_queryResult > 0){
                     while($ar_row = mysqli_fetch_assoc($ar_result)){
+                        $ar_user = !empty($ar_search)?highlightWords($ar_row['username'],$ar_search):$ar_row['username'];
+                        $ar_message = !empty($ar_search)?highlightWords($ar_row['themessage'],$ar_search):$ar_row['themessage'];
+                        $ar_date = !empty($ar_search)?highlightWords($ar_row['thedate'],$ar_search):$ar_row['thedate'];
+
+
+                        
                         ?>
-                        <b><?php echo $ar_row['username'];?> : </b><?php echo $ar_row['themessage'];?><br/><?php echo $ar_row['thedate'];?><br/><br/>
+                        <b><?php echo $ar_user;?> : </b><?php echo $ar_message;?><br/><?php echo $ar_date;?><br/><br/>
                         <?php
                     }
                 }
@@ -47,6 +65,5 @@ require 'connectToDb.php';
         ?>
     </div>
     <a href="history.php">Back to history.php</a>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html>
