@@ -4,12 +4,14 @@
 
 session_start();//démarrage de la session
 if(!isset($_SESSION['nickname']) || empty($_SESSION['nickname'])){
-    header("location:index.php");
+    header("location:index.php");//CONTROLLER
 }/*Un utilisateur ne peut accéder à ce fichier que s'il a rentré un login, sinon il est redirigé vers index.php*/
 
 require 'connectToDb.php';//connection à la DB
 
 ?>
+
+<!--VIEW-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,12 +31,14 @@ require 'connectToDb.php';//connection à la DB
     <hr/>
     <h2>All messages :</h2><br/><br/>
     <div id="message">
+
+    <!--MODEL-->
     <?php
-    $ar_sql = "SELECT * FROM essaitchat ORDER BY id DESC";/*Requête SQL pour récupérer tous les messages dans la DB. Il faudra ajouter une LIM et une pagination.*/
+    $ar_sql = "SELECT * FROM essaitchat ORDER BY id DESC";/*Requête SQL pour récupérer tous les messages dans la DB. Il faudra ajouter une LIM et une pagination. MODEL*/
 
-    $ar_result = mysqli_query($db,$ar_sql);
+    $ar_result = mysqli_query($db,$ar_sql);//MODEL
 
-    while ($ar_row = mysqli_fetch_assoc($ar_result)){
+    while ($ar_row = mysqli_fetch_assoc($ar_result)){//VIEW
     ?>
     <b><?php echo $ar_row['username'];?> : </b><?php echo $ar_row['themessage'];?><br/><?php echo $ar_row['thedate'];?><br/><br/><!--Affichage des messages-->
     <?php 
@@ -42,8 +46,8 @@ require 'connectToDb.php';//connection à la DB
     ?>
     </div>
     <a href="index.php">Retour à Index.php</a>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!--<script>
+   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
         $(document).ready(function(){
             $('#submit-search').keyup(function(){
                 $('#message').html();

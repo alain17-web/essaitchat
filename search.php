@@ -1,13 +1,17 @@
 <?php 
 
 /*Ce fichier sert à effectuer une recherche par mot-clé et à afficher les résultats. On peut aussi y ajouter une pagination*/
+
+//CONTROLLER
 session_start();
 if(!isset($_SESSION['nickname']) || empty($_SESSION['nickname'])){
     header("location:index.php");
 }
-require 'connectToDb.php';
+require 'connectToDb.php';//MODEL
 
 ?>
+
+<!--VIEW-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,29 +21,31 @@ require 'connectToDb.php';
     <title>Search</title>
 </head>
 <body>
-    <h1>Hello <?php echo $_SESSION['nickname'];?></h1>
+    <h1>Hello <?php// echo $_SESSION['nickname'];?></h1>
     <h1>SEARCH PAGE</h1>
 
     <div class="message">
+
+    <!--CONTROLLER-->
         <?php 
             if(isset($_GET['submit-search'])){
                 $ar_search = mysqli_real_escape_string($db,$_GET['search']);
 
                 
-
+                //MODEL (à traduire en fonction)
                 $ar_sql = "SELECT * FROM essaitchat WHERE themessage LIKE '%$ar_search%' OR username LIKE '%$ar_search%' OR thedate LIKE '%$ar_search%'";
-
-                
                 $ar_result = mysqli_query($db,$ar_sql);
 
+                
                 function highlightWords($ar_text, $ar_search){
                     $ar_text = preg_replace('#'. preg_quote($ar_search) .'#i', '<span style="background-color: #F9F902;">\\0</span>', $ar_text);
                     return $ar_text;
                     
                 }
-                $ar_queryResult = mysqli_num_rows($ar_result);
+                $ar_queryResult = mysqli_num_rows($ar_result);//VIEW ?
                 ?>
 
+                <!--VIEW-->
                 <b><?php echo "$ar_queryResult  results found";?> : </b><br/><br/>
                 <?php 
 
